@@ -80,10 +80,10 @@ export default function GameDashboard() {
       {/* Roads Display */}
       {currentGame && (
         <div className="space-y-4 mb-24">
-          <div className="overflow-x-auto">
+          <div className="w-full overflow-x-auto">
             <BigRoad records={currentGame.records} />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="w-full">
             <DerivedRoads records={currentGame.records} />
           </div>
         </div>

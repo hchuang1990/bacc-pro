@@ -1,6 +1,11 @@
 import React from 'react';
 import { GameRecord } from '../../types/game';
-import { calculateBigRoad, calculateDerivedRoad } from '../../utils/roadCalculations';
+import { 
+  calculateBigRoad, 
+  calculateBigEyeRoad, 
+  calculateSmallRoad, 
+  calculateCockroachRoad 
+} from '../../utils/roadCalculations';
 
 interface DerivedRoadsProps {
   records: GameRecord[];
@@ -8,28 +13,39 @@ interface DerivedRoadsProps {
 
 export default function DerivedRoads({ records }: DerivedRoadsProps) {
   const bigRoad = calculateBigRoad(records);
-  const bigEyeRoad = calculateDerivedRoad(bigRoad, 2);
-  const smallRoad = calculateDerivedRoad(bigRoad, 3);
-  const cockroachRoad = calculateDerivedRoad(bigRoad, 4);
+  const bigEyeRoad = calculateBigEyeRoad(bigRoad);
+  const smallRoad = calculateSmallRoad(bigRoad);
+  const cockroachRoad = calculateCockroachRoad(bigRoad);
 
   const renderDerivedRoad = (
     title: string,
-    road: ReturnType<typeof calculateDerivedRoad>,
+    road: Array<{ value: boolean; position: { row: number; col: number } }>,
     redColor: string,
-    blueColor: string
-  ) => (
-    <div className="bg-white p-4 rounded-lg shadow">
-      <h3 className="text-lg font-semibold mb-3">{title}</h3>
-      <div className="grid gap-px" style={{ 
-        gridTemplateColumns: `repeat(12, minmax(1.25rem, 1fr))`,
-        gridTemplateRows: `repeat(6, 1.25rem)`
-      }}>
-        {Array.from({ length: 72 }).map((_, index) => {
-          const cell = road.find(
-            cell => cell.position.row * 12 + cell.position.col === index
-          );
-          
-          return (
+    blueColor: string,
+    columns: number
+  ) => {
+    const rows = 6;
+    
+    // Create a 2D grid
+    const grid = Array.from({ length: rows }, () => 
+      Array.from({ length: columns }, () => null)
+    );
+
+    // Fill the grid with road data
+    road.forEach(cell => {
+      if (cell.position.row < rows && cell.position.col < columns) {
+        grid[cell.position.row][cell.position.col] = cell;
+      }
+    });
+
+    return (
+      <div className="bg-white p-4 rounded-lg shadow" style={{ width: '100%' }}>
+        <h3 className="text-lg font-semibold mb-3">{title}</h3>
+        <div className="grid gap-px" style={{ 
+          gridTemplateColumns: `repeat(${columns}, minmax(1.75rem, 1fr))`,
+          gridTemplateRows: `repeat(${rows}, 1.75rem)`
+        }}>
+          {grid.flat().map((cell, index) => (
             <div
               key={index}
               className={`flex items-center justify-center text-xs ${
@@ -42,17 +58,17 @@ export default function DerivedRoads({ records }: DerivedRoadsProps) {
             >
               {cell && (cell.value ? '●' : '○')}
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
-    <>
-      {renderDerivedRoad('Big Eye Boy Road', bigEyeRoad, 'bg-red-500 text-white', 'bg-blue-500 text-white')}
-      {renderDerivedRoad('Small Road', smallRoad, 'bg-red-400 text-white', 'bg-blue-400 text-white')}
-      {renderDerivedRoad('Cockroach Road', cockroachRoad, 'bg-red-300 text-white', 'bg-blue-300 text-white')}
-    </>
+    <div className="flex gap-4">
+      {renderDerivedRoad('Big Eye Boy Road', bigEyeRoad, 'bg-red-500 text-white', 'bg-blue-500 text-white', 12)}
+      {renderDerivedRoad('Small Road', smallRoad, 'bg-red-500 text-white', 'bg-blue-500 text-white', 10)}
+      {renderDerivedRoad('Cockroach Road', cockroachRoad, 'bg-red-500 text-white', 'bg-blue-500 text-white', 10)}
+    </div>
   );
 }
