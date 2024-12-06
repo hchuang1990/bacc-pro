@@ -27,32 +27,52 @@ export const calculateBeadRoad = (records: GameRecord[]): BeadRoadCell[] => {
 };
 
 export const calculateBigRoad = (records: GameRecord[]): BigRoadCell[] => {
-  const cells: BigRoadCell[] = [];
+  const bigRoad: BigRoadCell[] = [];
   let currentCol = 0;
   let currentRow = 0;
-  let streak = 1;
-  
-  for (let i = 0; i < records.length; i++) {
-    const current = records[i];
-    const previous = records[i - 1];
-    
-    if (previous && current.result === previous.result) {
-      currentRow++;
-      streak++;
-    } else {
+  let lastResult: 'banker' | 'player' | 'tie' | null = null;
+
+  records.forEach((record) => {
+    if (record.result === 'tie') {
+      // For ties, add to the last position if exists
+      if (bigRoad.length > 0) {
+        bigRoad.push({
+          result: 'tie',
+          position: {
+            row: bigRoad[bigRoad.length - 1].position.row,
+            col: bigRoad[bigRoad.length - 1].position.col,
+          },
+        });
+      }
+      return;
+    }
+
+    if (lastResult === null || lastResult !== record.result) {
+      // Start new column
       currentCol++;
       currentRow = 0;
-      streak = 1;
+    } else {
+      // Continue in same column, next row
+      currentRow++;
+      // If we reach max rows, start new column
+      if (currentRow >= 6) {
+        currentCol++;
+        currentRow = 0;
+      }
     }
-    
-    cells.push({
-      result: current.result,
-      position: { row: currentRow, col: currentCol },
-      streak
+
+    bigRoad.push({
+      result: record.result,
+      position: {
+        row: currentRow,
+        col: currentCol - 1, // Adjust to 0-based index
+      },
     });
-  }
-  
-  return cells;
+
+    lastResult = record.result;
+  });
+
+  return bigRoad;
 };
 
 export const calculateDerivedRoad = (bigRoad: BigRoadCell[], offset: number): DerivedRoadCell[] => {

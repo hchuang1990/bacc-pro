@@ -1,10 +1,8 @@
 export type GameResult = 'banker' | 'player' | 'tie';
 
 export interface GameRecord {
-  id: string;
   result: GameResult;
-  timestamp: number;
-  inning: number;
+  timestamp?: number;
 }
 
 export interface Game {
@@ -26,4 +24,12 @@ export interface RoadmapData {
   bigEyeBoy: boolean[];
   smallRoad: boolean[];
   cockroachPig: boolean[];
+}
+
+export interface BigRoadCell {
+  result: GameResult;
+  position: {
+    row: number;
+    col: number;
+  };
 }
