@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafd;
+  --color-bg-tertiary: #eef2f6;
+  --color-border: #e6e8eb;
+  --color-text-primary: #1e2329;
+  --color-text-secondary: #707a8a;
+  --color-accent: #2962ff;
+  --color-accent-hover: #2251cc;
+  --color-danger: #d32f2f;
+  --color-success: #2e7d32;
+  --color-warning: #ed8a19;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+.btn-primary {
+  @apply bg-[#2962ff] text-white px-4 py-2 rounded hover:bg-[#2251cc] transition-colors;
+}
+
+.btn-secondary {
+  @apply bg-[#eef2f6] text-[#1e2329] px-4 py-2 rounded hover:bg-[#e6e8eb] transition-colors;
+}
+
+.card {
+  @apply bg-white border border-[#e6e8eb] rounded-lg p-6 shadow-sm;
+}
+
+.input-field {
+  @apply bg-[#f8fafd] border border-[#e6e8eb] rounded-md px-3 py-2 text-[#1e2329] 
+         focus:outline-none focus:ring-2 focus:ring-[#2962ff] focus:border-transparent;
+}
+
+.table-cell {
+  @apply bg-white border border-[#e6e8eb] p-2;
+}
+
+.nav-link {
+  @apply text-[#707a8a] hover:text-[#1e2329] transition-colors;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #f8fafd 0%, #eef2f6 100%);
+}
