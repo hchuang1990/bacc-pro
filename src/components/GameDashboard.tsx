@@ -3,7 +3,7 @@ import { GameResult, GameRecord, Game } from '../types/game';
 import BigRoad from './roads/BigRoad';
 import DerivedRoads from './roads/DerivedRoads';
 import AlgorithmAnalysis from './AlgorithmAnalysis';
-import { BarChart2, Plus, RotateCcw, Layout } from 'lucide-react';
+import { BarChart2, Plus, RotateCcw, Layout, Play } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 
 export default function GameDashboard() {
@@ -64,17 +64,17 @@ export default function GameDashboard() {
             className="btn-secondary flex items-center gap-2 whitespace-nowrap"
           >
             <Plus size={20} />
-            New
+            New Game
           </button>
-        </div>
-        <button
+          <button
           onClick={() => setShowAnalysis(true)}
           className="btn-primary flex items-center justify-center gap-2"
           disabled={!currentGame || currentGame.records.length === 0}
         >
-          <BarChart2 size={20} />
-          Analyze Patterns
+          <Play size={20} />
+          Run Prediction
         </button>
+        </div>
       </div>
 
       {/* Roads Display */}
